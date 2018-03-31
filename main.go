@@ -56,6 +56,7 @@ func init() {
 func handler(w http.ResponseWriter, r *http.Request) {
 	groupZones()
 	fmt.Printf("query: %s\n", r.URL.Query())
+	// Volume
 	if volume, ok := r.URL.Query()["volume"]; ok {
 		room := "Living Room bar"
 		path := strings.Split(r.URL.Path, "/")
@@ -65,8 +66,21 @@ func handler(w http.ResponseWriter, r *http.Request) {
 
 		}
 		fmt.Printf("Setting volume for %s to %s\n", room, volume)
-		//setVolume(r.URL.Path[1])
+		setVolume(room, volume[0])
 	}
+	//Shuffle
+	if shuffle, ok := r.URL.Query()["shuffle"]; ok {
+		room := "Living Room bar"
+		path := strings.Split(r.URL.Path, "/")
+		fmt.Printf("len path: %d", len(path))
+		if len(path) > 2 {
+			room = path[1]
+
+		}
+		fmt.Printf("Setting shuffle for %s to %s\n", room, shuffle)
+		setShuffle(room, shuffle[0])
+	}
+	r.URL.RawQuery = ""
 	result, err := getApi(r.URL.String())
 	if err != nil {
 		fmt.Printf("Error: %s", err)
@@ -164,6 +178,34 @@ func PostPathData(path string) error {
 }
 */
 
+func setVolume(room, volume string) error {
+	path := fmt.Sprintf("/%s/volume/%s", UrlEncoded(room), UrlEncoded(volume))
+	result, err := getApi(path)
+	if err != nil {
+		return err
+	}
+	var r Result
+	err = json.Unmarshal(result, &r)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+func setShuffle(room, state string) error {
+	path := fmt.Sprintf("/%s/shuffle/%s", UrlEncoded(room), UrlEncoded(state))
+	result, err := getApi(path)
+	if err != nil {
+		return err
+	}
+	var r Result
+	err = json.Unmarshal(result, &r)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
 func setGroup(room, group string) error {
 	path := fmt.Sprintf("/%s/join/%s", UrlEncoded(room), UrlEncoded(group))
 	result, err := getApi(path)
@@ -175,10 +217,6 @@ func setGroup(room, group string) error {
 	if err != nil {
 		return err
 	}
-	/*
-		if r.status != "success" {
-			return fmt.Errorf(r.status)
-		}*/
 	return nil
 }
 

@@ -21,7 +21,7 @@ run-race: get
 	go run -race
 
 linux: get
-	GOOS=linux GOARCH=amd64 go build -v -o ./sonis-domotics -ldflags '-s -w --extldflags "-static" ' ./main.go ./api.go
+	GOOS=linux GOARCH=amd64 go build -v -o ./sonos-domotics -ldflags '-s -w --extldflags "-static" ' ./main.go ./api.go
 
 
 all: bench run
