@@ -109,7 +109,7 @@ func groupZones() {
 				fmt.Printf("Expected 3 members, but got: %d\n", len(zone.Members))
 				expectedMembers := map[string]bool{
 					"Living Room2": false,
-					"Kitchen":      false,
+					//"Kitchen":      false,
 				}
 				for _, member := range zone.Members {
 					if _, ok := expectedMembers[member.RoomName]; ok {
