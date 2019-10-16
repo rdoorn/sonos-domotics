@@ -24,4 +24,7 @@ linux: get
 	GOOS=linux GOARCH=amd64 go build -v -o ./sonos-domotics -ldflags '-s -w --extldflags "-static" ' ./main.go ./api.go
 
 
+docker: get
+	docker build -t sonos-go:1.0 . -f Dockerfile
+
 all: bench run
